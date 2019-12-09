@@ -1,0 +1,2 @@
+-split getCurrentImage into two, one for background and one for entity because the functionality seemed split. It made more sense and was easier to split it in two than keep it together
+-moved createBlacksmith(), createObstacle(), etc. (all create[type of entity]()) to the Entity class. There did not seem to be any specific class where it was beneficial to place these, so logically a method that creates specific types of entities belongs in the Entity class.
