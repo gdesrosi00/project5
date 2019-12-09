@@ -7,6 +7,10 @@ import java.util.function.Predicate;
 
 public class FireBall extends AnimatedEntity {
 
+    private static final String SMOKE_ID = "smoke";
+    private static final String SMOKE_KEY = "smoke";
+    private static final int SMOKE_ACTION_PERIOD = 1100;
+    private static final int SMOKE_ANIMATION_PERIOD = 200;
 
     public FireBall(String id, Point position, List<PImage> images, int actionPeriod, int animationPeriod) {
         super(id, position, images, actionPeriod, animationPeriod);
@@ -21,8 +25,15 @@ public class FireBall extends AnimatedEntity {
             Point tgtPos = fireBallTarget.get().getPosition();
 
             if (this.moveTo(world, fireBallTarget.get(), scheduler)) {
-                AnimatedEntity           }
+                AnimatedEntity smoke = new Smoke(SMOKE_ID, tgtPos, imageStore.getImageList(SMOKE_KEY), SMOKE_ACTION_PERIOD, SMOKE_ANIMATION_PERIOD);
+
+                world.addEntity(smoke);
+                nextPeriod += this.getActionPeriod();
+                smoke.scheduleActions(scheduler, world, imageStore);
+            }
         }
+
+        scheduler.scheduleEvent(this, this.createActivityAction(world, imageStore), nextPeriod);
 
     }
 
