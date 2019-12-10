@@ -87,8 +87,30 @@ public final class VirtualWorld extends PApplet
 
     public void mousePressed() {
         Point pressed = mouseToPoint(mouseX / TILE_WIDTH, mouseY / TILE_HEIGHT);
-        redraw();
+        List<Entity> lavaPool = new ArrayList<>();
+        lavaPool.add(new Lava("lava", pressed, imageStore.getImageList("lava"), 20000, true));
+        lavaPool.add(new Lava("lava", new Point(pressed.x + 1, pressed.y), imageStore.getImageList("lava"), 10, false));
+        lavaPool.add(new Lava("lava", new Point(pressed.x + 1, pressed.y + 1), imageStore.getImageList("lava"), 10, false));
+        lavaPool.add(new Lava("lava", new Point(pressed.x + 1, pressed.y - 1), imageStore.getImageList("lava"), 10, false));
+        lavaPool.add(new Lava("lava", new Point(pressed.x, pressed.y + 1), imageStore.getImageList("lava"), 10, false));
+        lavaPool.add(new Lava("lava", new Point(pressed.x, pressed.y - 1), imageStore.getImageList("lava"), 10, false));
+        lavaPool.add(new Lava("lava", new Point(pressed.x - 1, pressed.y + 1), imageStore.getImageList("lava"), 10, false));
+        lavaPool.add(new Lava("lava", new Point(pressed.x - 1, pressed.y), imageStore.getImageList("lava"), 10, false));
+        lavaPool.add(new Lava("lava", new Point(pressed.x - 1, pressed.y - 1), imageStore.getImageList("lava"), 10, false));
+        for (Entity e : lavaPool)
+        {
+            if (!world.isOccupied(e.getPosition()))
+            {
+                world.tryAddEntity(e);
 
+                if(((Lava)e).isMid())
+                {
+                    Lava middle = ((Lava)e);
+                    middle.scheduleActions(scheduler, world, imageStore);
+                }
+            }
+        }
+        redraw();
     }
 
     public void keyPressed() {
